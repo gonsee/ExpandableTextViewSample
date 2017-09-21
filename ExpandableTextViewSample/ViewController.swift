@@ -10,16 +10,39 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var scrollView: UIScrollView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+        let nib = UINib(nibName: "ExpandableTextView", bundle: nil)
+        if let expandableView = nib.instantiate(withOwner: nil, options: nil).first as? ExpandableTextView {
+            view.addSubview(expandableView)
+            expandableView.translatesAutoresizingMaskIntoConstraints = false
 
+            // expandableView　と view の制約
+            // 高さ方向は intrinsicContentSize で決まるので制約はいらない
+            expandableView.leadingAnchor
+                .constraint(equalTo: view.leadingAnchor)
+                .isActive = true
+            expandableView.trailingAnchor
+                .constraint(equalTo: view.trailingAnchor)
+                .isActive = true
+            expandableView.bottomAnchor
+                .constraint(equalTo: view.bottomAnchor)
+                .isActive = true
+
+            // expandableView　が scrollView に被らないようにする制約
+            // view と scrollView の bottom は優先度を低くしてあるので
+            // expandableView が存在すればこちらが優先される
+            expandableView.topAnchor
+                .constraint(equalTo: scrollView.bottomAnchor)
+                .isActive = true
+
+            expandableView.configure(withText: "ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ")
+        }
+
+    }
 
 }
 
